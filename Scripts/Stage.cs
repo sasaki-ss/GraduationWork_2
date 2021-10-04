@@ -7,18 +7,22 @@ public class Stage : MonoBehaviour
     [SerializeField]
     private GameObject[] obj;   //マップオブジェクト
     
-    private float defaultY;     //初期座標
-    private float intervalY;    //マップオブジェクトの間隔
+    private float defaultY;         //初期座標
+    private float intervalY;        //マップオブジェクトの間隔
+    private float destroyPointY;    //破壊間隔
 
     //初期化処理
     private void Start()
     {
+        FollowCamara fCamera = GameObject.Find("Main Camera").GetComponent<FollowCamara>();
+
         //配列を確保
         obj = new GameObject[Define.MAP_OBJECT_NUM];
 
         //private変数の初期化
-        defaultY = -4.0f;
+        defaultY = -4f;
         intervalY = 1.02f;
+        destroyPointY = fCamera.GetScrrenBottomRight().y - 3f;
 
         //Resourcesフォルダのオブジェクトを読み込む
         obj[0] = (GameObject)Resources.Load("Default_Obj");
@@ -32,7 +36,15 @@ public class Stage : MonoBehaviour
     //更新処理
     private void Update()
     {
-        Debug.Log("更新中");
+        //Debug.Log(screenBottomY);
+
+        //foreach (Transform t in this.gameObject.transform)
+        //{
+        //    if(t.position.y >= screenBottomY)
+        //    {
+        //        GameObject.Destroy(t.gameObject);
+        //    }
+        //}
     }
 
     //再初期化処理
@@ -57,7 +69,7 @@ public class Stage : MonoBehaviour
     {
         //オブジェクトを生成
         GameObject inst = (GameObject)Instantiate(obj[_objNum],
-            new Vector3(0.0f, defaultY, 0.0f), Quaternion.identity);
+            new Vector3(0f, defaultY, 0f), Quaternion.identity);
 
         //親オブジェクトを設定
         inst.transform.SetParent(this.transform, false);
