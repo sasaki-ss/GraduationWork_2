@@ -22,7 +22,7 @@ public class Stage : MonoBehaviour
         //private変数の初期化
         defaultY = -4f;
         intervalY = 1.02f;
-        destroyPointY = fCamera.GetScrrenBottomRight().y - 3f;
+        destroyPointY = fCamera.bottomY - 3f;
 
         //Resourcesフォルダのオブジェクトを読み込む
         obj[0] = (GameObject)Resources.Load("Default_Obj");
@@ -36,15 +36,19 @@ public class Stage : MonoBehaviour
     //更新処理
     private void Update()
     {
-        //Debug.Log(screenBottomY);
+        FollowCamara fCamera = GameObject.Find("Main Camera").GetComponent<FollowCamara>();
 
-        //foreach (Transform t in this.gameObject.transform)
-        //{
-        //    if(t.position.y >= screenBottomY)
-        //    {
-        //        GameObject.Destroy(t.gameObject);
-        //    }
-        //}
+        destroyPointY = fCamera.bottomY - 3f;
+
+        Debug.Log("破壊ポイント : " + destroyPointY);
+
+        foreach (Transform t in this.gameObject.transform)
+        {
+            if (t.position.y <= destroyPointY)
+            {
+                GameObject.Destroy(t.gameObject);
+            }
+        }
     }
 
     //再初期化処理

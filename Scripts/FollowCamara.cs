@@ -7,13 +7,22 @@ public class FollowCamara : MonoBehaviour
     [SerializeField]
     private Camera cameraObj;
 
-    private void Start()
+    public float bottomY { get; private set; }
+
+    private void Awake()
     {
         cameraObj = this.GetComponent<Camera>();
     }
 
+    private void Start()
+    {
+        bottomY = transform.position.y - 5f;
+    }
+
     private void Update()
     {
+        bottomY = transform.position.y - 5f;
+
         if (Input.GetKey(KeyCode.UpArrow))
         {
             transform.position += new Vector3(0f, 0.1f, 0f);
@@ -23,22 +32,5 @@ public class FollowCamara : MonoBehaviour
         {
             transform.position -= new Vector3(0f, 0.1f, 0f);
         }
-    }
-
-    public Vector3 GetScrrenTopLeft()
-    {
-        Vector3 topLeft = cameraObj.ScreenToWorldPoint(Vector3.zero);
-        topLeft.Scale(new Vector3(1f, -1f, 1f));
-
-        return topLeft;
-    }
-
-    public Vector3 GetScrrenBottomRight()
-    {
-        Vector3 bottomRight = cameraObj.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0.0f));
-
-        bottomRight.Scale(new Vector3(1f, -1f, 1f));
-
-        return bottomRight;
     }
 }
