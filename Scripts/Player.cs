@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
         animator.SetFloat("Speed", 1);
         rb2d = GetComponent<Rigidbody2D>();
+        transform.position = new Vector3(0, -3.5f, 0);
     }
 
     // Update is called once per frame
