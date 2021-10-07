@@ -25,10 +25,11 @@ public class DefaultObj : MonoBehaviour
 
         if (!isOnPlayer)
         {
-            if (transform.position.y <= player.transform.position.y - 0.5f)
+            if (transform.position.y <= player.transform.position.y - 0.3f)
             {
                 floor.GetComponent<BoxCollider2D>().enabled = true;
                 isOnPlayer = true;
+                Debug.Log("“–‚½‚è”»’è‚ð•t—^");
             }
         }
     }
