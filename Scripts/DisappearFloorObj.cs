@@ -39,7 +39,7 @@ public class DisappearFloorObj : MonoBehaviour
 
         if (!isOnPlayer)
         {
-            if (transform.position.y <= player.transform.position.y - 0.5f)
+            if (transform.position.y <= player.transform.position.y - 0.3f)
             {
                 foreach(Transform t in gameObject.transform)
                 {
