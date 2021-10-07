@@ -28,6 +28,8 @@ public class Stage : MonoBehaviour
         obj[0] = (GameObject)Resources.Load("Default_Obj");
         obj[1] = (GameObject)Resources.Load("DefaultL_Obj");
         obj[2] = (GameObject)Resources.Load("DefaultR_Obj");
+        obj[3] = (GameObject)Resources.Load("DefaultNone_Obj");
+        obj[4] = (GameObject)Resources.Load("DisappearFloor_Obj");
 
         //初期化を行う
         ReInit();
@@ -40,13 +42,14 @@ public class Stage : MonoBehaviour
 
         destroyPointY = fCamera.bottomY - 3f;
 
-        Debug.Log("破壊ポイント : " + destroyPointY);
-
         foreach (Transform t in this.gameObject.transform)
         {
             if (t.position.y <= destroyPointY)
             {
                 GameObject.Destroy(t.gameObject);
+                defaultY += intervalY;
+                int randNum = (int)Random.Range(0, 5);
+                GenerateObject(randNum);
             }
         }
     }
@@ -58,11 +61,11 @@ public class Stage : MonoBehaviour
         GenerateObject(0);
 
         //2段目以降のオブジェクトを生成
-        for (int i = 0; i < 9; i++)
+        for (int i = 0; i < 15; i++)
         {
             defaultY += intervalY;
 
-            int randNum = (int)Random.Range(0, 3);
+            int randNum = (int)Random.Range(0, 5);
 
             GenerateObject(randNum);
         }
