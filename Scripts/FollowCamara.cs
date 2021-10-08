@@ -6,9 +6,10 @@ public class FollowCamara : MonoBehaviour
 {
     [SerializeField]
     private Camera cameraObj;
-    private GameObject player;
-    private Transform playerTf;
-    private Transform cameraTf;
+    private GameObject player;      //プレイヤー
+    private Transform playerTf;     //プレイヤートランスフォーム
+    private Transform cameraTf;     //カメラ座標
+    private Vector3 keepVec;        //プレイヤー座標の保持
     public float bottomY { get; private set; }
 
     private void Awake()
@@ -22,22 +23,25 @@ public class FollowCamara : MonoBehaviour
     private void Start()
     {
         bottomY = transform.position.y - 5f;
+        keepVec = playerTf.position;
+        keepVec.y = keepVec.y - 0.03924f;   //プレイヤーの一番下の段の時の座標に合わせている
     }
-
-    private void Update()
+    private void LateUpdate()
     {
         bottomY = transform.position.y - 5f;
 
-        transform.position = new Vector3(transform.position.x, cameraTf.position.y + 3.5f, transform.position.z); ;
-
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (keepVec.y < playerTf.position.y)    //一度カメラが上昇したら下がらないようにする
         {
-            transform.position += new Vector3(0f, 0.1f, 0f);
+            transform.position = new Vector3(transform.position.x, cameraTf.position.y + 2.5f, transform.position.z);
+            keepVec.y = playerTf.position.y;
+
         }
 
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            transform.position -= new Vector3(0f, 0.1f, 0f);
-        }
+        //if (Input.GetKey(KeyCode.A))  //座標を表示
+        //{
+        //    Debug.Log("keep" + keepVec.y);
+        //    Debug.Log("player" + playerTf.position.y);
+        //}
+
     }
 }

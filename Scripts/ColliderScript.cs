@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ColliderScript : MonoBehaviour
 {
+    //オブジェクトがオブジェクト(当たり判定)の範囲内にあるか検知するスクリプト
     private bool isTouch;
     private bool isTouchEnter,isTouchStay,isTouchExit;
     public bool IsGround()
@@ -25,19 +26,19 @@ public class ColliderScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("何かが判定に入りました");
+        //Debug.Log("何かが判定に入りました");
         isTouchEnter = true;
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        Debug.Log("何かが判定に入り続けています");
+        //Debug.Log("何かが判定に入り続けています");
         isTouchStay = true;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log("何かが判定をでました");
+        //Debug.Log("何かが判定をでました");
         isTouchExit = true;
     }
 }
