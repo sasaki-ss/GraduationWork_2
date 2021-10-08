@@ -9,7 +9,7 @@ public class DisappearFloor : MonoBehaviour
 
     private void Start()
     {
-        timer = 0.5f;
+        timer = 0.3f;
         isDestroy = false;
     }
 
