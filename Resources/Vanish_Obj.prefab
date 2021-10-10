@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7800895440711211597}
-  - component: {fileID: 7800895440711211596}
+  - component: {fileID: 1896535739226561137}
   m_Layer: 0
-  m_Name: DisappearFloor_Obj
+  m_Name: Vanish_Obj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7800895440711211596
+--- !u!114 &1896535739226561137
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,7 +40,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7800895440711211598}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f146d6b6d40c92945b440ba391cf44df, type: 3}
+  m_Script: {fileID: 11500000, guid: 505ad5b7742bb4c4e8d18859a1bad4d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floorObj: {fileID: 0}
