@@ -22,6 +22,7 @@ public class DefaultObj : MonoBehaviour
         if (!isOnPlayer)
         {
             Player player = GameObject.Find("Player").GetComponent<Player>();
+            Score score = GameObject.Find("Score").GetComponent<Score>();
 
             //°‚æ‚èƒvƒŒƒCƒ„[‚ª‚‚¢ê‡
             if (transform.position.y <= player.transform.position.y - 0.3f)

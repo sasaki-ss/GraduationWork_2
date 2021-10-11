@@ -23,14 +23,15 @@ public class Stage : MonoBehaviour
         Vanish_Obj
     };
 
-    ObjectInfo[] obj;           //オブジェクト情報
-
-    [SerializeField]
-    private GameObject[] obj2;  //マップオブジェクト
+    private ObjectInfo[] obj;       //オブジェクト情報
     
     private float defaultY;         //初期座標
     private float intervalY;        //マップオブジェクトの間隔
     private float destroyPointY;    //破壊間隔
+
+    [SerializeField]
+    private int generateCnt;    //生成数
+    private bool isChange;      //難易度変更フラグ
 
     //初期化処理
     private void Start()
@@ -44,6 +45,8 @@ public class Stage : MonoBehaviour
         defaultY = -4f;
         intervalY = 1.02f;
         destroyPointY = fCamera.bottomY - 3f;
+        generateCnt = 0;
+        isChange = false;
 
         for (int i = 0; i < Define.MAP_OBJECT_NUM; i++)
         {
@@ -85,6 +88,23 @@ public class Stage : MonoBehaviour
         //オブジェクトの破壊ポイントを更新
         FollowCamara fCamera = GameObject.Find("Main Camera").GetComponent<FollowCamara>();
         destroyPointY = fCamera.bottomY - 3f;
+
+        if (generateCnt % Define.MAP_DIFFICULTY_CNT == 0 && !isChange)
+        {
+            for (int i = 0; i < Define.MAP_OBJECT_NUM; i++)
+            {
+                if (obj[i].coolTime == 0) continue;
+
+                obj[i].coolTime--;
+
+                Debug.Log(i + "番目のオブジェクトを" + obj[i].coolTime + "に変更");
+            }
+            isChange = true;
+        }
+        else if (isChange && generateCnt % Define.MAP_DIFFICULTY_CNT != 0)
+        {
+            isChange = false;
+        }
 
         //オブジェクト破壊処理
         foreach (Transform t in this.gameObject.transform)
@@ -169,6 +189,8 @@ public class Stage : MonoBehaviour
 
         //間隔を更新
         defaultY += intervalY;
+
+        generateCnt++;
     }
 
     //子をオブジェクトを削除
