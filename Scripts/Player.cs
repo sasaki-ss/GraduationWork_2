@@ -23,6 +23,11 @@ public class Player : MonoBehaviour
     Animator animator;               //アニメーター
     Rigidbody2D rb2d;                //リジットボディ2D
 
+    public int JumpCount
+    {
+        get { return jumpCount; }
+    }
+
     void Start()
     {
         //初期化
