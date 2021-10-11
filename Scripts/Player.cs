@@ -16,6 +16,9 @@ public class Player : MonoBehaviour
     private bool isDirection;        //左右の方向の切り替えフラグ
     private bool isJump;             //ジャンプフラグ
 
+    private int jumpCount;           //ジャンプカウント
+    private bool countFlg;           //カウントフラグ
+
     SpriteRenderer sr;               //スプライトレンダラー
     Animator animator;               //アニメーター
     Rigidbody2D rb2d;                //リジットボディ2D
@@ -24,7 +27,7 @@ public class Player : MonoBehaviour
     {
         //初期化
         isActive = true;
-        speed = 0.003f;              //速度
+        speed = 0.006f;              //速度
         jumpPower = 230.5f;          //ジャンプ力
 
         ColliderChecks = new GameObject[3];
@@ -46,6 +49,10 @@ public class Player : MonoBehaviour
 
         //ジャンプ可能
         isJump = true;
+
+        //ジャンプカウント
+        jumpCount = 0;
+        countFlg = true;
 
         //スプライトレンダラー
         sr = GetComponent<SpriteRenderer>();
@@ -76,11 +83,25 @@ public class Player : MonoBehaviour
             rb2d.velocity = Vector2.zero;                       //速度リセット
             rb2d.AddForce(jumpPower * Vector2.up);              //力を加える
             isJump = false;
+            if (!countFlg) countFlg = true;
         }
 
         if (ColliderScr[0].IsGround() == true)                  //床に触れた時
         {
             isJump = true;
+            if(rb2d.velocity == new Vector2(0, 0))              //着地中
+            {
+                jumpCount = 0;
+                if(!countFlg) countFlg = true;
+            }
+            else
+            {
+                if (countFlg)
+                {
+                    jumpCount++;
+                    countFlg = false;
+                }
+            }
         }
 
         if (ColliderScr[1].IsGround() == true && isJump)        //左の壁
@@ -91,6 +112,11 @@ public class Player : MonoBehaviour
         if (ColliderScr[2].IsGround() == true && isJump)        //右の壁
         {
             isDirection = false;    //左に移動
+        }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            Debug.Log("Add" + jumpCount);
         }
     }
 }
