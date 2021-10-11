@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Score : MonoBehaviour
 {
-    [SerializeField]
-    private int score;
+    private static int score = 0;
 
     private void Start()
     {
@@ -15,5 +14,10 @@ public class Score : MonoBehaviour
     public void AddScore(int _jumpCnt)
     {
         score += Define.DEFALUT_SCORE + (_jumpCnt * 2);
+    }
+
+    public static int GetScore()
+    {
+        return score;
     }
 }
