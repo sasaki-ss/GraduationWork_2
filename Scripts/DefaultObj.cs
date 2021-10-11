@@ -30,7 +30,7 @@ public class DefaultObj : MonoBehaviour
                 //“–‚½‚è”»’è‚ð—LŒø‰»
                 floor.GetComponent<BoxCollider2D>().enabled = true;
                 isOnPlayer = true;
-                Debug.Log("“–‚½‚è”»’è‚ð•t—^");
+                score.AddScore(player.JumpCount);
             }
         }
     }

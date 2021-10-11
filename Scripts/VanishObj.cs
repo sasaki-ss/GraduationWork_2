@@ -7,6 +7,7 @@ public class VanishObj : MonoBehaviour
     private float   defaultX;       //初期座標
     private float   intervalX;      //間隔
     private bool    isOnPlayer;     //プレイヤーが乗っているかフラグ
+    private bool    isScore;        //スコアフラグ
 
     private GameObject floorObj;    //床オブジェクト
     private GameObject wallObj;     //壁オブジェクト
@@ -16,6 +17,7 @@ public class VanishObj : MonoBehaviour
         defaultX = -2.2169f;
         intervalX = 0.5f;
         isOnPlayer = false;
+        isScore = false;
 
         floorObj = (GameObject)Resources.Load("StageObj_003");
         wallObj = (GameObject)Resources.Load("StageObj_002");
@@ -98,6 +100,13 @@ public class VanishObj : MonoBehaviour
                     }
                 }
                 isOnPlayer = true;
+
+                if (!isScore)
+                {
+                    Score score = GameObject.Find("Score").GetComponent<Score>();
+                    score.AddScore(player.JumpCount);
+                    isScore = true;
+                }
             }
         }
         //プレイヤーが乗っている場合
