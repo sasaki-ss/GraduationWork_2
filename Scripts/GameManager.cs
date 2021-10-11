@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class GameManager : MonoBehaviour
         if(gameOverLine >= player.transform.position.y)
         {
             Debug.Log("GameOver");
+
+            SceneManager.LoadScene("Result");
         }
     }
 }
