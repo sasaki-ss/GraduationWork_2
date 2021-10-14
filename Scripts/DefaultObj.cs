@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class DefaultObj : MonoBehaviour
 {
-    private bool        isOnPlayer; //プレイヤーいるフラグ
-    private GameObject  floor;      //床オブジェクト
+    public bool isOnPlayer { get; set; }    //プレイヤーいるフラグ
+
+    private GameObject  floor;  //床オブジェクト
+
+    private void Awake()
+    {
+        isOnPlayer = false;
+    }
 
     //初期化処理
     private void Start()
     {
         //床オブジェクトを取得
         floor = transform.Find("StageObj_001").gameObject;
-        floor.GetComponent<BoxCollider2D>().enabled = false;
-        isOnPlayer = false;
+        if (!isOnPlayer) floor.GetComponent<BoxCollider2D>().enabled = false;
     }
 
     private void Update()

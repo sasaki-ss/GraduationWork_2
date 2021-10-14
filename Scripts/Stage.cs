@@ -29,7 +29,6 @@ public class Stage : MonoBehaviour
     private float intervalY;        //マップオブジェクトの間隔
     private float destroyPointY;    //破壊間隔
 
-    [SerializeField]
     private int generateCnt;    //生成数
     private bool isChange;      //難易度変更フラグ
 
@@ -96,8 +95,6 @@ public class Stage : MonoBehaviour
                 if (obj[i].coolTime == 0) continue;
 
                 obj[i].coolTime--;
-
-                Debug.Log(i + "番目のオブジェクトを" + obj[i].coolTime + "に変更");
             }
             isChange = true;
         }
@@ -124,7 +121,7 @@ public class Stage : MonoBehaviour
     private void ReInit()
     {
         //一番ベースのオブジェクトを生成
-        GenerateObject(0);
+        GenerateObject(0, true);
 
         //2段目以降のオブジェクトを生成
         for (int i = 0; i < 15; i++)
@@ -146,7 +143,7 @@ public class Stage : MonoBehaviour
             if (obj[i].isCoolDown)
             {
                 //カウントがcoolTimeになったときクールダウンを終了する
-                if (obj[i].coolDownCnt == obj[i].coolTime)
+                if (obj[i].coolDownCnt >= obj[i].coolTime)
                 {
                     obj[i].coolDownCnt = 0;
                     obj[i].isCoolDown = false;
@@ -172,7 +169,7 @@ public class Stage : MonoBehaviour
     }
 
     //オブジェクト生成処理
-    private void GenerateObject(int _objNum)
+    private void GenerateObject(int _objNum,bool _isOnPlayer = false)
     {
         //オブジェクトを生成
         GameObject inst = (GameObject)Instantiate(obj[_objNum].obj,
@@ -180,6 +177,11 @@ public class Stage : MonoBehaviour
 
         //親オブジェクトを設定
         inst.transform.SetParent(this.transform, false);
+
+        if(_objNum >= (int)ObjectList.Default && _objNum <= (int)ObjectList.Default_None)
+        {
+            inst.GetComponent<DefaultObj>().isOnPlayer = _isOnPlayer;
+        }
 
         //デフォルトオブジェクト(0番目のObj)以外の場合クールダウンにする
         if(_objNum != (int)ObjectList.Default)
