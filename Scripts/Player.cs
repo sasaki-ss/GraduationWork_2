@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
     private bool countFlg;           //カウントフラグ
 
     SpriteRenderer sr;               //スプライトレンダラー
-    Animator animator;               //アニメーター
+    AudioSource audioSrc;               //オーディオソース
     Rigidbody2D rb2d;                //リジットボディ2D
 
     public int JumpCount
@@ -33,7 +33,7 @@ public class Player : MonoBehaviour
         //初期化
         isActive = true;
         speed = 0.0035f;              //速度
-        jumpPower = 230.5f;          //ジャンプ力
+        jumpPower = 230.5f;           //ジャンプ力
 
         ColliderChecks = new GameObject[3];
 
@@ -61,7 +61,10 @@ public class Player : MonoBehaviour
 
         //スプライトレンダラー
         sr = GetComponent<SpriteRenderer>();
-        
+
+        //オーディオソース
+        audioSrc = GetComponent<AudioSource>();
+
         //リジットボディ2D
         rb2d = GetComponent<Rigidbody2D>();
         
@@ -88,6 +91,7 @@ public class Player : MonoBehaviour
             rb2d.velocity = Vector2.zero;                       //速度リセット
             rb2d.AddForce(jumpPower * Vector2.up);              //力を加える
             isJump = false;
+            audioSrc.Play();                                    //効果音
             if (!countFlg) countFlg = true;
         }
 
