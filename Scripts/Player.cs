@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
     {
         //初期化
         isActive = true;
-        speed = 0.006f;              //速度
+        speed = 0.0035f;              //速度
         jumpPower = 230.5f;          //ジャンプ力
 
         ColliderChecks = new GameObject[3];
