@@ -18,12 +18,13 @@ public class FollowCamara : MonoBehaviour
         player = GameObject.Find("Player");
         playerTf = player.transform;
         cameraTf = playerTf;
+
     }
 
     private void Start()
     {
         bottomY = transform.position.y - 5f;
-        keepVec = playerTf.position;
+        keepVec.y = -3.5f;
         keepVec.y = keepVec.y - 0.03924f;   //プレイヤーの一番下の段の時の座標に合わせている
     }
     private void LateUpdate()
@@ -35,6 +36,11 @@ public class FollowCamara : MonoBehaviour
             transform.position = new Vector3(transform.position.x, cameraTf.position.y + 2.5f, transform.position.z);
             keepVec.y = playerTf.position.y;
 
+        }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            Debug.Log("keepVec" + keepVec);
         }
 
         //if (Input.GetKey(KeyCode.A))  //座標を表示
