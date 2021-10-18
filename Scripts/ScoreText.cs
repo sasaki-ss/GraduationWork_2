@@ -5,14 +5,29 @@ using UnityEngine.UI;
 
 public class ScoreText : MonoBehaviour
 {
-    private Text text;
+    private string tmpText;
+
+    [SerializeField]
+    private GameObject score;
+    [SerializeField]
+    private GameObject highScore;
+    [SerializeField]
+    private GameObject newScore;
 
     private void Start()
     {
-        text = this.GetComponent<Text>();
-    }
-    private void Update()
-    {
-        text.text = Score.GetScore().ToString();
+        tmpText = "現在のハイスコア\n";
+
+        score = GameObject.Find("Result_Score");
+        highScore = GameObject.Find("Result_HighScore");
+        newScore = GameObject.Find("Result_NewScore");
+
+        score.GetComponent<Text>().text = Score.GetScore().ToString();
+        highScore.GetComponent<Text>().text = tmpText + Score.GetHighScore().ToString();
+
+        if (!Score.GetIsHighScore())
+        {
+            newScore.SetActive(false);
+        }
     }
 }

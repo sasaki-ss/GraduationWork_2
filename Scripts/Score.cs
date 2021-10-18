@@ -13,6 +13,7 @@ public class Score : MonoBehaviour
 {
     private static int score = 0;
     private static int highScore = 0;
+    private static bool isHighScore = false;
     private string filePath;
     private SaveScore save;
 
@@ -27,6 +28,7 @@ public class Score : MonoBehaviour
         Load();
 
         highScore = save.score;
+        isHighScore = false;
 
         score = 0;
     }
@@ -35,6 +37,7 @@ public class Score : MonoBehaviour
     {
         if(score > highScore)
         {
+            isHighScore = true;
             save.score = score;
         }
 
@@ -49,6 +52,16 @@ public class Score : MonoBehaviour
     public static int GetScore()
     {
         return score;
+    }
+
+    public static int GetHighScore()
+    {
+        return highScore;
+    }
+
+    public static bool GetIsHighScore()
+    {
+        return isHighScore;
     }
 
     public void Save()
