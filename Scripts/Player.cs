@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     public bool isActive;                    //プレイヤーのアクティブ状態
         
     private float speed;                     //プレイヤーのスピード
+    private const float TMP_SPEED = 0.03f;
     private float jumpPower;                 //プレイヤーのジャンプ力
 
     private GameObject[] ColliderChecks;     //床と壁の判定
@@ -15,6 +16,11 @@ public class Player : MonoBehaviour
 
     private bool isDirection;        //左右の方向の切り替えフラグ
     private bool isJump;             //ジャンプフラグ
+    private bool highJump;           //ハイジャンプフラグ
+    private bool highNow;            //ハイジャンプ中
+    private int highCnt;             //ハイジャンプ中のカウント
+
+    private const int JUMP_COOLDOWN = 2 * 60;
 
     private int jumpCount;           //ジャンプカウント
     private bool countFlg;           //カウントフラグ
@@ -32,7 +38,7 @@ public class Player : MonoBehaviour
     {
         //初期化
         isActive = true;
-        speed = 0.03f;              //速度
+        speed = TMP_SPEED;              //速度
         jumpPower = 230.5f;           //ジャンプ力
 
         ColliderChecks = new GameObject[3];
@@ -54,6 +60,11 @@ public class Player : MonoBehaviour
 
         //ジャンプ可能
         isJump = true;
+        highJump = true;
+
+        //ハイジャンプ後のジャンプ不可用
+        highNow = false;
+        highCnt = JUMP_COOLDOWN;
 
         //ジャンプカウント
         jumpCount = 0;
@@ -75,6 +86,18 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Move(); //移動
+        Jump(); //ジャンプ
+        TouchFloor();   //床
+        TouchSideWall();//壁
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            Debug.Log("Add" + jumpCount);
+        }
+    }
+
+    private void Move()
+    {
         if (isDirection)                                        //右に移動
         {
             transform.position += new Vector3(speed, 0, 0);
@@ -85,8 +108,22 @@ public class Player : MonoBehaviour
             transform.position += new Vector3(-speed, 0, 0);
             sr.flipX = true;
         }
+    }
+    private void Jump()
+    {
+        if (isJump && Input.GetKeyDown(KeyCode.Space) && highJump)//ハイジャンプ
+        {
+            rb2d.velocity = Vector2.zero;                       //速度リセット
+            rb2d.AddForce(jumpPower * 5 * Vector2.up);          //力を加える
+            highJump = false;                                   //ハイジャンプ中フラグオン
+            highNow = true;                                     //
+            highCnt = 0;
+            speed = speed / 5;
+            audioSrc.Play();                                    //効果音
+            if (!countFlg) countFlg = true;
+        }
 
-        if (isJump && Input.GetKeyDown(KeyCode.Space))          //ジャンプ
+        if (isJump && Input.GetKeyDown(KeyCode.Space) && !highJump && JUMP_COOLDOWN <= highCnt)//ジャンプ
         {
             rb2d.velocity = Vector2.zero;                       //速度リセット
             rb2d.AddForce(jumpPower * Vector2.up);              //力を加える
@@ -95,13 +132,26 @@ public class Player : MonoBehaviour
             if (!countFlg) countFlg = true;
         }
 
-        if (ColliderScr[0].IsGround() == true)                  //床に触れた時
+        if (highNow)                                            //ハイジャンプ中
+        {
+            highCnt++;
+        }
+        if(JUMP_COOLDOWN <= highCnt)
+        {
+            highNow = false;
+            speed = TMP_SPEED;
+        }
+        
+    }
+    private void TouchFloor()
+    {
+        if (ColliderScr[0].IsGround() == true)      //床に触れた時
         {
             isJump = true;
-            if(rb2d.velocity == new Vector2(0, 0))              //着地中
+            if (rb2d.velocity == new Vector2(0, 0)) //着地中
             {
                 jumpCount = 0;
-                if(!countFlg) countFlg = true;
+                if (!countFlg) countFlg = true;
             }
             else
             {
@@ -112,20 +162,20 @@ public class Player : MonoBehaviour
                 }
             }
         }
+    }
+    private void TouchSideWall()
+    {
 
-        if (ColliderScr[1].IsGround() == true && isJump)        //左の壁
+        if (ColliderScr[1].IsGround() == true)        //左の壁
         {
             isDirection = true;     //右に移動
         }
 
-        if (ColliderScr[2].IsGround() == true && isJump)        //右の壁
+        if (ColliderScr[2].IsGround() == true)        //右の壁
         {
             isDirection = false;    //左に移動
         }
 
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            Debug.Log("Add" + jumpCount);
-        }
     }
 }
+
