@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FloorObj : MonoBehaviour
 {
-    private bool isOnPlayer;
+    public bool isOnPlayer { get; set; }
 
     private void Awake()
     {

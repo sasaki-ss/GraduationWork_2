@@ -178,7 +178,7 @@ public class Stage : MonoBehaviour
 
         if(_objNum >= (int)ObjectList.Default && _objNum <= (int)ObjectList.Default_None)
         {
-            inst.GetComponent<DefaultObj>().isOnPlayer = _isOnPlayer;
+            inst.GetComponentInChildren<FloorObj>().isOnPlayer = _isOnPlayer;
         }
 
         //デフォルトオブジェクト(0番目のObj)以外の場合クールダウンにする
