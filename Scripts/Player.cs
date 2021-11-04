@@ -187,5 +187,16 @@ public class Player : MonoBehaviour
         }
 
     }
+    public void _HighJump()
+    {
+        rb2d.velocity = Vector2.zero;                       //速度リセット
+        rb2d.AddForce(jumpPower * 5 * Vector2.up);          //力を加える
+        highJump = false;                                   //ハイジャンプ中フラグオン
+        highNow = true;                                     //
+        highCnt = 0;
+        speed = speed / 5;
+        audioSrc.Play();                                    //効果音
+        if (!countFlg) countFlg = true;
+    }
 }
 

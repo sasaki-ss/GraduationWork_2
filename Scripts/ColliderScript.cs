@@ -40,6 +40,7 @@ public class ColliderScript : MonoBehaviour
         {
             Destroy(collision.gameObject);
             _scrPlayer.HighJump = true;
+            _scrPlayer._HighJump();
         }
 
         else isTouchEnter = true;
