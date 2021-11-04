@@ -33,9 +33,19 @@ public class Player : MonoBehaviour
     {
         get { return jumpCount; }
     }
+    public bool HighJump
+    {
+        set { highJump = value; }
+    }
+
+    private void Awake()
+    {
+        Application.targetFrameRate = 60;
+    }
 
     void Start()
     {
+
         //初期化
         isActive = true;
         speed = TMP_SPEED;              //速度
@@ -60,7 +70,7 @@ public class Player : MonoBehaviour
 
         //ジャンプ可能
         isJump = true;
-        highJump = true;
+        highJump = false;
 
         //ハイジャンプ後のジャンプ不可用
         highNow = false;
