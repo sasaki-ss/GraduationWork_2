@@ -1,31 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!61 &3563897390889684613
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2143249452766756131}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.28, y: 0.64}
-    newSize: {x: 1, y: 2}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.28, y: 0.64}
-  m_EdgeRadius: 0
 --- !u!1 &2481898410282844229
 GameObject:
   m_ObjectHideFlags: 0
@@ -131,11 +105,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a4e98724205c4a4681a9e2e285d9de2, type: 3}
---- !u!1 &2143249452766756131 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6941295293865075801, guid: 5a4e98724205c4a4681a9e2e285d9de2, type: 3}
-  m_PrefabInstance: {fileID: 9073123010946095482}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2143249452766756133 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6941295293865075807, guid: 5a4e98724205c4a4681a9e2e285d9de2, type: 3}

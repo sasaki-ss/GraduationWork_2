@@ -20,13 +20,13 @@ public class Stage : MonoBehaviour
         Default_L,
         Default_R,
         Default_None,
-        Vanish_Obj
+        Vanish_Obj,
+        Moving_Obj
     };
 
     private ObjectInfo[] obj;       //オブジェクト情報
     
     private float defaultY;         //初期座標
-    private float intervalY;        //マップオブジェクトの間隔
     private float destroyPointY;    //破壊間隔
 
     private int generateCnt;    //生成数
@@ -42,7 +42,6 @@ public class Stage : MonoBehaviour
 
         //private変数の初期化
         defaultY = -4f;
-        intervalY = 1.02f;
         destroyPointY = fCamera.bottomY - 3f;
         generateCnt = 0;
         isChange = false;
@@ -59,7 +58,7 @@ public class Stage : MonoBehaviour
         obj[(int)ObjectList.Default_R].coolTime = 4;
         obj[(int)ObjectList.Default_None].coolTime = 6;
         obj[(int)ObjectList.Vanish_Obj].coolTime = 6;
-        obj[5].coolTime = 0;
+        obj[(int)ObjectList.Moving_Obj].coolTime = 10;
         obj[6].coolTime = 0;
         obj[7].coolTime = 0;
         obj[8].coolTime = 0;
@@ -76,6 +75,8 @@ public class Stage : MonoBehaviour
             (GameObject)Resources.Load("DefaultNone_Obj");
         obj[(int)ObjectList.Vanish_Obj].obj = 
             (GameObject)Resources.Load("Vanish_Obj");
+        obj[(int)ObjectList.Moving_Obj].obj =
+            (GameObject)Resources.Load("MovingWallObj");
 
         //初期化を行う
         ReInit();
@@ -107,7 +108,7 @@ public class Stage : MonoBehaviour
         foreach (Transform t in this.gameObject.transform)
         {
             //破壊ポイントより下の場合対象のオブジェクトを破壊する
-            if (t.position.y <= destroyPointY)
+            if (t.GetComponent<StageObject>().destroyPoint <= destroyPointY)
             {
                 GameObject.Destroy(t.gameObject);
 
@@ -159,7 +160,7 @@ public class Stage : MonoBehaviour
         //乱数がクールダウン中のオブジェクトか判定する
         while (!isCheck)
         {
-            randNum = (int)Random.Range(0, 5);
+            randNum = (int)Random.Range(0, 6);
 
             if (!obj[randNum].isCoolDown) isCheck = true;
         }
@@ -178,9 +179,19 @@ public class Stage : MonoBehaviour
         //親オブジェクトを設定
         inst.transform.SetParent(this.transform, false);
 
+        //ノーマル系の生成の場合の処理
         if(_objNum >= (int)ObjectList.Default && _objNum <= (int)ObjectList.Default_None)
         {
-            inst.GetComponent<DefaultObj>().isOnPlayer = _isOnPlayer;
+            inst.GetComponentInChildren<FloorObj>().isOnPlayer = _isOnPlayer;
+        }
+
+        if(_objNum == (int)ObjectList.Moving_Obj)
+        {
+            int floorNum = (int)Random.Range(0, 20);
+
+            inst.GetComponent<MovingWallObj>().SetFloorNum(floorNum);
+
+            defaultY += (Define.MAP_INTERVAL_Y * floorNum);
         }
 
         //デフォルトオブジェクト(0番目のObj)以外の場合クールダウンにする
@@ -190,17 +201,12 @@ public class Stage : MonoBehaviour
         }
 
         //間隔を更新
-        defaultY += intervalY;
-
-        generateCnt++;
-    }
-
-    //子をオブジェクトを削除
-    private void AllChildrenObjectDelete()
-    {
-        foreach(Transform t in this.gameObject.transform)
+        if(_objNum != (int)ObjectList.Moving_Obj)
         {
-            GameObject.Destroy(t.gameObject);
+            defaultY += Define.MAP_INTERVAL_Y;
         }
+
+        inst.GetComponent<StageObject>().destroyPoint = defaultY;
+        generateCnt++;
     }
 }

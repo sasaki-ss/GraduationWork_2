@@ -2,23 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DefaultObj : MonoBehaviour
+public class FloorObj : MonoBehaviour
 {
-    public bool isOnPlayer { get; set; }    //プレイヤーいるフラグ
-
-    private GameObject  floor;  //床オブジェクト
+    public bool isOnPlayer { get; set; }
 
     private void Awake()
     {
         isOnPlayer = false;
     }
 
-    //初期化処理
     private void Start()
     {
-        //床オブジェクトを取得
-        floor = transform.Find("StageObj_001").gameObject;
-        if (!isOnPlayer) floor.GetComponent<BoxCollider2D>().enabled = false;
+        if (!isOnPlayer) this.GetComponent<BoxCollider2D>().enabled = false;
     }
 
     private void Update()
@@ -33,7 +28,7 @@ public class DefaultObj : MonoBehaviour
             if (transform.position.y <= player.transform.position.y - 0.3f)
             {
                 //当たり判定を有効化
-                floor.GetComponent<BoxCollider2D>().enabled = true;
+                this.GetComponent<BoxCollider2D>().enabled = true;
                 isOnPlayer = true;
                 score.AddScore(player.JumpCount);
             }
