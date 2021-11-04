@@ -108,7 +108,7 @@ public class Stage : MonoBehaviour
         foreach (Transform t in this.gameObject.transform)
         {
             //破壊ポイントより下の場合対象のオブジェクトを破壊する
-            if (t.position.y <= destroyPointY)
+            if (t.GetComponent<StageObject>().destroyPoint <= destroyPointY)
             {
                 GameObject.Destroy(t.gameObject);
 
@@ -206,6 +206,7 @@ public class Stage : MonoBehaviour
             defaultY += Define.MAP_INTERVAL_Y;
         }
 
+        inst.GetComponent<StageObject>().destroyPoint = defaultY;
         generateCnt++;
     }
 }
