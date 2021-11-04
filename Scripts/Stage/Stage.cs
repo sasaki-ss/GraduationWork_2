@@ -20,7 +20,8 @@ public class Stage : MonoBehaviour
         Default_L,
         Default_R,
         Default_None,
-        Vanish_Obj
+        Vanish_Obj,
+        Moving_Obj
     };
 
     private ObjectInfo[] obj;       //オブジェクト情報
@@ -57,7 +58,7 @@ public class Stage : MonoBehaviour
         obj[(int)ObjectList.Default_R].coolTime = 4;
         obj[(int)ObjectList.Default_None].coolTime = 6;
         obj[(int)ObjectList.Vanish_Obj].coolTime = 6;
-        obj[5].coolTime = 0;
+        obj[(int)ObjectList.Moving_Obj].coolTime = 10;
         obj[6].coolTime = 0;
         obj[7].coolTime = 0;
         obj[8].coolTime = 0;
@@ -74,6 +75,8 @@ public class Stage : MonoBehaviour
             (GameObject)Resources.Load("DefaultNone_Obj");
         obj[(int)ObjectList.Vanish_Obj].obj = 
             (GameObject)Resources.Load("Vanish_Obj");
+        obj[(int)ObjectList.Moving_Obj].obj =
+            (GameObject)Resources.Load("MovingWallObj");
 
         //初期化を行う
         ReInit();
@@ -157,7 +160,7 @@ public class Stage : MonoBehaviour
         //乱数がクールダウン中のオブジェクトか判定する
         while (!isCheck)
         {
-            randNum = (int)Random.Range(0, 5);
+            randNum = (int)Random.Range(0, 6);
 
             if (!obj[randNum].isCoolDown) isCheck = true;
         }
@@ -176,9 +179,19 @@ public class Stage : MonoBehaviour
         //親オブジェクトを設定
         inst.transform.SetParent(this.transform, false);
 
+        //ノーマル系の生成の場合の処理
         if(_objNum >= (int)ObjectList.Default && _objNum <= (int)ObjectList.Default_None)
         {
             inst.GetComponentInChildren<FloorObj>().isOnPlayer = _isOnPlayer;
+        }
+
+        if(_objNum == (int)ObjectList.Moving_Obj)
+        {
+            int floorNum = (int)Random.Range(0, 20);
+
+            inst.GetComponent<MovingWallObj>().SetFloorNum(floorNum);
+
+            defaultY += (Define.MAP_INTERVAL_Y * floorNum);
         }
 
         //デフォルトオブジェクト(0番目のObj)以外の場合クールダウンにする
@@ -188,16 +201,11 @@ public class Stage : MonoBehaviour
         }
 
         //間隔を更新
-        defaultY += Define.MAP_INTERVAL_Y;
-        generateCnt++;
-    }
-
-    //子をオブジェクトを削除
-    private void AllChildrenObjectDelete()
-    {
-        foreach(Transform t in this.gameObject.transform)
+        if(_objNum != (int)ObjectList.Moving_Obj)
         {
-            GameObject.Destroy(t.gameObject);
+            defaultY += Define.MAP_INTERVAL_Y;
         }
+
+        generateCnt++;
     }
 }
