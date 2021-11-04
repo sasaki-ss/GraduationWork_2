@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VanishObj : MonoBehaviour
+public class VanishObj : StageObject
 {
     private float   defaultX;       //初期座標
     private float   intervalX;      //間隔
-    private bool    isOnPlayer;     //プレイヤーが乗っているかフラグ
     private bool    isScore;        //スコアフラグ
 
     private GameObject floorObj;    //床オブジェクト

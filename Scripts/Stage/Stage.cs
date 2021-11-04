@@ -26,7 +26,6 @@ public class Stage : MonoBehaviour
     private ObjectInfo[] obj;       //オブジェクト情報
     
     private float defaultY;         //初期座標
-    private float intervalY;        //マップオブジェクトの間隔
     private float destroyPointY;    //破壊間隔
 
     private int generateCnt;    //生成数
@@ -42,7 +41,6 @@ public class Stage : MonoBehaviour
 
         //private変数の初期化
         defaultY = -4f;
-        intervalY = 1.02f;
         destroyPointY = fCamera.bottomY - 3f;
         generateCnt = 0;
         isChange = false;
@@ -190,8 +188,7 @@ public class Stage : MonoBehaviour
         }
 
         //間隔を更新
-        defaultY += intervalY;
-
+        defaultY += Define.MAP_INTERVAL_Y;
         generateCnt++;
     }
 
