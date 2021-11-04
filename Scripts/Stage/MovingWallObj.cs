@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class MovingWallObj : StageObject
 {
-    private int floorNum;   //床の数
+    private int     floorNum;   //床の数
+    private float   stopPoint;  //壁が止まる位置
 
-    GameObject[] walls;
+    GameObject[] walls;     //壁
 
     private void Awake()
     {
         floorNum = 0;
+        stopPoint = 0f;
         isOnPlayer = false;
 
         walls = new GameObject[2];
@@ -18,6 +20,7 @@ public class MovingWallObj : StageObject
 
     private void Start()
     {
+        //生成に必要なオブジェクトを読み込む
         GameObject floorObj = (GameObject)Resources.Load("StageObj_001");
         GameObject wallObj = (GameObject)Resources.Load("StageObj_004");
 
@@ -34,7 +37,7 @@ public class MovingWallObj : StageObject
                 new Vector3(-2.9f, 0.5f, 0f), Quaternion.identity);
 
         walls[1] = (GameObject)Instantiate(wallObj,
-                new Vector3(2.9f, 0.5f, 0f), Quaternion.identity);
+                new Vector3(2.9f, 0.5f + Define.MAP_INTERVAL_Y, 0f), Quaternion.identity);
 
         foreach (GameObject wall in walls)
         {
@@ -42,8 +45,31 @@ public class MovingWallObj : StageObject
         }
     }
 
+    private void Update()
+    {
+        foreach(GameObject wall in walls)
+        {
+            if (wall.GetComponent<WallTriggerProc>().isInvasion)
+            {
+                Vector3 beforePos = wall.transform.position;
+
+                wall.transform.position = new Vector3(
+                    beforePos.x, beforePos.y + (Define.MAP_INTERVAL_Y * 2), beforePos.z);
+
+                if(wall.transform.position.y >= stopPoint)
+                {
+                    wall.transform.position = new Vector3(
+                        beforePos.x, stopPoint, beforePos.z);
+                }
+
+                wall.GetComponent<WallTriggerProc>().isInvasion = false;
+            }
+        }
+    }
+
     public void SetFloorNum(int _val)
     {
         floorNum = _val;
+        stopPoint = this.transform.position.y + 0.5f + ((floorNum - 1) * Define.MAP_INTERVAL_Y);
     }
 }
