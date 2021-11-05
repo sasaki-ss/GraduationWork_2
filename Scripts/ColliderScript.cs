@@ -39,8 +39,11 @@ public class ColliderScript : MonoBehaviour
         if (collision.gameObject.name == "JumpItem")
         {
             Destroy(collision.gameObject);
-            _scrPlayer.HighJump = true;
-            _scrPlayer._HighJump();
+            _scrPlayer.HighJumpFlg = true;
+        }
+        else if (collision.gameObject.name == "JumpTable")
+        {
+            _scrPlayer.JunpTableFlg = true;
         }
 
         else isTouchEnter = true;

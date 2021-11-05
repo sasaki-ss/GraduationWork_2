@@ -16,9 +16,13 @@ public class Player : MonoBehaviour
 
     private bool isDirection;        //左右の方向の切り替えフラグ
     private bool isJump;             //ジャンプフラグ
-    private bool highJump;           //ハイジャンプフラグ
+    private bool hJumpFlg;           //ハイジャンプフラグ
     private bool highNow;            //ハイジャンプ中
     private int highCnt;             //ハイジャンプ中のカウント
+
+    private bool jTableFlg;         //ジャンプ台フラグ
+    private Vector2 rTableForce;    //ジャンプ台威力
+    private Vector2 lTableForce;    //ジャンプ台威力
 
     private const int JUMP_COOLDOWN = 2 * 60;
 
@@ -33,9 +37,13 @@ public class Player : MonoBehaviour
     {
         get { return jumpCount; }
     }
-    public bool HighJump
+    public bool HighJumpFlg
     {
-        set { highJump = value; }
+        set { hJumpFlg = value; }
+    }
+    public bool JunpTableFlg
+    {
+        set { jTableFlg = value; }
     }
 
     private void Awake()
@@ -70,11 +78,16 @@ public class Player : MonoBehaviour
 
         //ジャンプ可能
         isJump = true;
-        highJump = false;
+        hJumpFlg = false;
 
         //ハイジャンプ後のジャンプ不可用
         highNow = false;
         highCnt = JUMP_COOLDOWN;
+
+        //ジャンプ台
+        jTableFlg = false;
+        rTableForce = new Vector2(-jumpPower, jumpPower);
+        lTableForce = new Vector2(jumpPower, jumpPower);
 
         //ジャンプカウント
         jumpCount = 0;
@@ -96,12 +109,17 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (hJumpFlg) HighJump();
+        if (jTableFlg) JumpTable();
+
         Move(); //移動
         Jump(); //ジャンプ
         TouchFloor();   //床
         TouchSideWall();//壁
+
         if (Input.GetKeyDown(KeyCode.A))
         {
+            JumpTable();
             Debug.Log("Add" + jumpCount);
         }
     }
@@ -121,19 +139,7 @@ public class Player : MonoBehaviour
     }
     private void Jump()
     {
-        if (isJump && Input.GetKeyDown(KeyCode.Space) && highJump)//ハイジャンプ
-        {
-            rb2d.velocity = Vector2.zero;                       //速度リセット
-            rb2d.AddForce(jumpPower * 5 * Vector2.up);          //力を加える
-            highJump = false;                                   //ハイジャンプ中フラグオン
-            highNow = true;                                     //
-            highCnt = 0;
-            speed = speed / 5;
-            audioSrc.Play();                                    //効果音
-            if (!countFlg) countFlg = true;
-        }
-
-        if (isJump && Input.GetKeyDown(KeyCode.Space) && !highJump && JUMP_COOLDOWN <= highCnt)//ジャンプ
+        if (isJump && Input.GetKeyDown(KeyCode.Space) && !hJumpFlg && JUMP_COOLDOWN <= highCnt)//ジャンプ
         {
             rb2d.velocity = Vector2.zero;                       //速度リセット
             rb2d.AddForce(jumpPower * Vector2.up);              //力を加える
@@ -187,15 +193,26 @@ public class Player : MonoBehaviour
         }
 
     }
-    public void _HighJump()
+    private void HighJump()
     {
         rb2d.velocity = Vector2.zero;                       //速度リセット
         rb2d.AddForce(jumpPower * 5 * Vector2.up);          //力を加える
-        highJump = false;                                   //ハイジャンプ中フラグオン
-        highNow = true;                                     //
         highCnt = 0;
         speed = speed / 5;
         audioSrc.Play();                                    //効果音
+        hJumpFlg = false;                                   //ハイジャンプフラグオフ
+        highNow = true;                                     //ハイジャンプ中フラグオン
+        if (!countFlg) countFlg = true;
+    }
+
+    private void JumpTable()
+    {
+        rb2d.velocity = Vector2.zero;                               //速度リセット
+        if (!isDirection) rb2d.AddForce(lTableForce);       //力を加える (左)
+        else if (isDirection) rb2d.AddForce(rTableForce);   //力を加える (右)
+        isJump = false;
+        audioSrc.Play();                                            //効果音
+        jTableFlg = false;
         if (!countFlg) countFlg = true;
     }
 }
