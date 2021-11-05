@@ -21,7 +21,8 @@ public class Stage : MonoBehaviour
         Default_R,
         Default_None,
         Vanish_Obj,
-        Moving_Obj
+        Moving_Obj,
+        MovingFloor_Obj
     };
 
     private ObjectInfo[]    obj;            //オブジェクト情報
@@ -58,7 +59,7 @@ public class Stage : MonoBehaviour
         }
 
         itemCoolDownCnt = 0;
-        isItemCoolDown = false;
+        isItemCoolDown = true;
 
         //初期クールタイムを設定
         obj[(int)ObjectList.Default].coolTime = 0;
@@ -67,7 +68,7 @@ public class Stage : MonoBehaviour
         obj[(int)ObjectList.Default_None].coolTime = 6;
         obj[(int)ObjectList.Vanish_Obj].coolTime = 6;
         obj[(int)ObjectList.Moving_Obj].coolTime = 10;
-        obj[6].coolTime = 0;
+        obj[(int)ObjectList.MovingFloor_Obj].coolTime = 6;
         obj[7].coolTime = 0;
         obj[8].coolTime = 0;
         obj[9].coolTime = 0;
@@ -87,6 +88,8 @@ public class Stage : MonoBehaviour
             (GameObject)Resources.Load("Vanish_Obj");
         obj[(int)ObjectList.Moving_Obj].obj =
             (GameObject)Resources.Load("MovingWallObj");
+        obj[(int)ObjectList.MovingFloor_Obj].obj =
+            (GameObject)Resources.Load("MovingFloor_Obj");
 
         jumpItemObj = (GameObject)Resources.Load("JumpItem");
 
@@ -185,7 +188,7 @@ public class Stage : MonoBehaviour
         //乱数がクールダウン中のオブジェクトか判定する
         while (!isCheck)
         {
-            randNum = (int)Random.Range(0, 6);
+            randNum = (int)Random.Range(0, 7);
 
             if (!obj[randNum].isCoolDown) isCheck = true;
         }
