@@ -24,13 +24,18 @@ public class Stage : MonoBehaviour
         Moving_Obj
     };
 
-    private ObjectInfo[] obj;       //オブジェクト情報
+    private ObjectInfo[]    obj;            //オブジェクト情報
     
     private float defaultY;         //初期座標
     private float destroyPointY;    //破壊間隔
 
     private int generateCnt;    //生成数
     private bool isChange;      //難易度変更フラグ
+
+    private GameObject  jumpItemObj;        //ジャンプアイテム用オブジェクト
+    private int         itemCoolDownCnt;    //アイテムの生成クールタイムカウント
+    private int         itemCoolTime;       //アイテムの生成クールタイム
+    private bool        isItemCoolDown;     //アイテムのクールダウンフラグ
 
     //初期化処理
     private void Start()
@@ -52,6 +57,9 @@ public class Stage : MonoBehaviour
             obj[i].isCoolDown = false;
         }
 
+        itemCoolDownCnt = 0;
+        isItemCoolDown = false;
+
         //初期クールタイムを設定
         obj[(int)ObjectList.Default].coolTime = 0;
         obj[(int)ObjectList.Default_L].coolTime = 4;
@@ -63,6 +71,8 @@ public class Stage : MonoBehaviour
         obj[7].coolTime = 0;
         obj[8].coolTime = 0;
         obj[9].coolTime = 0;
+
+        itemCoolTime = 50;
 
         //Resourcesフォルダのオブジェクトを読み込む
         obj[(int)ObjectList.Default].obj = 
@@ -77,6 +87,8 @@ public class Stage : MonoBehaviour
             (GameObject)Resources.Load("Vanish_Obj");
         obj[(int)ObjectList.Moving_Obj].obj =
             (GameObject)Resources.Load("MovingWallObj");
+
+        jumpItemObj = (GameObject)Resources.Load("JumpItem");
 
         //初期化を行う
         ReInit();
@@ -157,6 +169,19 @@ public class Stage : MonoBehaviour
             }
         }
 
+        if (isItemCoolDown)
+        {
+            if(itemCoolDownCnt >= itemCoolTime)
+            {
+                itemCoolDownCnt = 0;
+                isItemCoolDown = false;
+            }
+            else
+            {
+                itemCoolDownCnt++;
+            }
+        }
+
         //乱数がクールダウン中のオブジェクトか判定する
         while (!isCheck)
         {
@@ -179,15 +204,26 @@ public class Stage : MonoBehaviour
         //親オブジェクトを設定
         inst.transform.SetParent(this.transform, false);
 
+
+        int itemRandNum = (int)Random.Range(0, 100);
+
+        if(itemRandNum % 10 == 0 && !isItemCoolDown)
+        {
+            GameObject item = (GameObject)Instantiate(jumpItemObj,
+                new Vector3(Random.Range(-2.4f, 2.4f), defaultY - 0.5f, 0f), Quaternion.identity);
+
+            isItemCoolDown = true;
+        }
+
         //ノーマル系の生成の場合の処理
-        if(_objNum >= (int)ObjectList.Default && _objNum <= (int)ObjectList.Default_None)
+        if (_objNum >= (int)ObjectList.Default && _objNum <= (int)ObjectList.Default_None)
         {
             inst.GetComponentInChildren<FloorObj>().isOnPlayer = _isOnPlayer;
         }
 
         if(_objNum == (int)ObjectList.Moving_Obj)
         {
-            int floorNum = (int)Random.Range(0, 20);
+            int floorNum = (int)Random.Range(5, 10);
 
             inst.GetComponent<MovingWallObj>().SetFloorNum(floorNum);
 
