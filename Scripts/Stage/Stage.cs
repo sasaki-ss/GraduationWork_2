@@ -210,7 +210,7 @@ public class Stage : MonoBehaviour
         if(itemRandNum % 10 == 0 && !isItemCoolDown)
         {
             GameObject item = (GameObject)Instantiate(jumpItemObj,
-                new Vector3(0f, defaultY - 0.5f, 0f), Quaternion.identity);
+                new Vector3(Random.Range(-2.4f, 2.4f), defaultY - 0.5f, 0f), Quaternion.identity);
 
             isItemCoolDown = true;
         }
