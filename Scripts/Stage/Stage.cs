@@ -187,7 +187,7 @@ public class Stage : MonoBehaviour
 
         if(_objNum == (int)ObjectList.Moving_Obj)
         {
-            int floorNum = (int)Random.Range(0, 20);
+            int floorNum = (int)Random.Range(5, 20);
 
             inst.GetComponent<MovingWallObj>().SetFloorNum(floorNum);
 
