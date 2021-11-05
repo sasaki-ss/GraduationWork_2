@@ -212,6 +212,10 @@ public class Stage : MonoBehaviour
             GameObject item = (GameObject)Instantiate(jumpItemObj,
                 new Vector3(Random.Range(-2.4f, 2.4f), defaultY - 0.5f, 0f), Quaternion.identity);
 
+            item.name = "JumpItem";
+            item.transform.SetParent(this.transform, false);
+            item.GetComponent<StageObject>().destroyPoint = defaultY;
+
             isItemCoolDown = true;
         }
 
