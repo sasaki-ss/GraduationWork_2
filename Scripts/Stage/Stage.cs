@@ -27,11 +27,12 @@ public class Stage : MonoBehaviour
 
     private ObjectInfo[]    obj;            //オブジェクト情報
     
-    private float defaultY;         //初期座標
-    private float destroyPointY;    //破壊間隔
+    private float   defaultY;         //初期座標
+    private float   destroyPointY;    //破壊間隔
 
-    private int generateCnt;    //生成数
-    private bool isChange;      //難易度変更フラグ
+    private int     generateCnt;    //生成数
+    private int     oneBeforeObj;   //ひとつ前の生成オブジェクト
+    private bool    isChange;       //難易度変更フラグ
 
     private GameObject  jumpItemObj;        //ジャンプアイテム用オブジェクト
     private int         itemCoolDownCnt;    //アイテムの生成クールタイムカウント
@@ -50,6 +51,7 @@ public class Stage : MonoBehaviour
         defaultY = -4f;
         destroyPointY = fCamera.bottomY - 3f;
         generateCnt = 0;
+        oneBeforeObj = 0;
         isChange = false;
 
         for (int i = 0; i < Define.MAP_OBJECT_NUM; i++)
@@ -67,7 +69,7 @@ public class Stage : MonoBehaviour
         obj[(int)ObjectList.Default_R].coolTime = 4;
         obj[(int)ObjectList.Default_None].coolTime = 6;
         obj[(int)ObjectList.Vanish_Obj].coolTime = 6;
-        obj[(int)ObjectList.Moving_Obj].coolTime = 10;
+        obj[(int)ObjectList.Moving_Obj].coolTime = 20;
         obj[(int)ObjectList.MovingFloor_Obj].coolTime = 6;
         obj[7].coolTime = 0;
         obj[8].coolTime = 0;
@@ -190,7 +192,15 @@ public class Stage : MonoBehaviour
         {
             randNum = (int)Random.Range(0, 7);
 
-            if (!obj[randNum].isCoolDown) isCheck = true;
+            if (!(oneBeforeObj >= (int)ObjectList.Default &&
+                oneBeforeObj <= (int)ObjectList.Default_R) &&
+                randNum == (int)ObjectList.MovingFloor_Obj) continue;
+
+            if (!obj[randNum].isCoolDown)
+            {
+                isCheck = true;
+                oneBeforeObj = randNum;
+            }
         }
 
         //オブジェクトを生成

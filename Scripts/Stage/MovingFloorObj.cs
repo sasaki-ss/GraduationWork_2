@@ -11,7 +11,7 @@ public class MovingFloorObj : StageObject
 
     private void Start()
     {
-        moveSpeed = 0.1f;
+        moveSpeed = 0.05f;
         isOnPlayer = false;
         isScore = false;
         floor = transform.Find("StageObj_005").gameObject;
@@ -50,11 +50,11 @@ public class MovingFloorObj : StageObject
 
         if(floor.transform.position.x <= -1.92f)
         {
-            moveSpeed = 0.1f;
+            moveSpeed = 0.05f;
         }
         else if(floor.transform.position.x >= 1.92f)
         {
-            moveSpeed = -0.1f;
+            moveSpeed = -0.05f;
         }
 
         floor.transform.position += new Vector3(moveSpeed, 0, 0);
