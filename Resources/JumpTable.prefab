@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 195644919411164082}
   - component: {fileID: 195644919411164083}
   - component: {fileID: 195644919411164081}
+  - component: {fileID: -1037338747931313928}
   m_Layer: 0
   m_Name: JumpTable
   m_TagString: Untagged
@@ -109,3 +110,15 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.32, y: 0.32}
   m_EdgeRadius: 0
+--- !u!114 &-1037338747931313928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195644919411164092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02435768554f51749b2411cdd7365c0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -22,21 +22,28 @@ public class Stage : MonoBehaviour
         Default_None,
         Vanish_Obj,
         Moving_Obj,
-        MovingFloor_Obj
+        MovingFloor_Obj,
+        SwapFloor_Obj
     };
 
     private ObjectInfo[]    obj;            //オブジェクト情報
     
-    private float defaultY;         //初期座標
-    private float destroyPointY;    //破壊間隔
+    private float   defaultY;         //初期座標
+    private float   destroyPointY;    //破壊間隔
 
-    private int generateCnt;    //生成数
-    private bool isChange;      //難易度変更フラグ
+    private int     generateCnt;    //生成数
+    private int     oneBeforeObj;   //ひとつ前の生成オブジェクト
+    private bool    isChange;       //難易度変更フラグ
 
     private GameObject  jumpItemObj;        //ジャンプアイテム用オブジェクト
     private int         itemCoolDownCnt;    //アイテムの生成クールタイムカウント
     private int         itemCoolTime;       //アイテムの生成クールタイム
     private bool        isItemCoolDown;     //アイテムのクールダウンフラグ
+
+    private GameObject  jumpTableObj;
+    private int         tableCoolDownCnt;
+    private int         tableCoolTime;
+    private bool        isTableCoolDown;
 
     //初期化処理
     private void Start()
@@ -50,6 +57,7 @@ public class Stage : MonoBehaviour
         defaultY = -4f;
         destroyPointY = fCamera.bottomY - 3f;
         generateCnt = 0;
+        oneBeforeObj = 0;
         isChange = false;
 
         for (int i = 0; i < Define.MAP_OBJECT_NUM; i++)
@@ -60,6 +68,8 @@ public class Stage : MonoBehaviour
 
         itemCoolDownCnt = 0;
         isItemCoolDown = true;
+        tableCoolDownCnt = 0;
+        isTableCoolDown = true;
 
         //初期クールタイムを設定
         obj[(int)ObjectList.Default].coolTime = 0;
@@ -67,13 +77,14 @@ public class Stage : MonoBehaviour
         obj[(int)ObjectList.Default_R].coolTime = 4;
         obj[(int)ObjectList.Default_None].coolTime = 6;
         obj[(int)ObjectList.Vanish_Obj].coolTime = 6;
-        obj[(int)ObjectList.Moving_Obj].coolTime = 10;
+        obj[(int)ObjectList.Moving_Obj].coolTime = 20;
         obj[(int)ObjectList.MovingFloor_Obj].coolTime = 6;
-        obj[7].coolTime = 0;
+        obj[(int)ObjectList.SwapFloor_Obj].coolTime = 14;
         obj[8].coolTime = 0;
         obj[9].coolTime = 0;
 
         itemCoolTime = 50;
+        tableCoolTime = 10;
 
         //Resourcesフォルダのオブジェクトを読み込む
         obj[(int)ObjectList.Default].obj = 
@@ -90,8 +101,11 @@ public class Stage : MonoBehaviour
             (GameObject)Resources.Load("MovingWallObj");
         obj[(int)ObjectList.MovingFloor_Obj].obj =
             (GameObject)Resources.Load("MovingFloor_Obj");
+        obj[(int)ObjectList.SwapFloor_Obj].obj =
+            (GameObject)Resources.Load("SwapFloor_Obj");
 
         jumpItemObj = (GameObject)Resources.Load("JumpItem");
+        jumpTableObj = (GameObject)Resources.Load("JumpTable");
 
         //初期化を行う
         ReInit();
@@ -185,12 +199,34 @@ public class Stage : MonoBehaviour
             }
         }
 
+        if (isTableCoolDown)
+        {
+            if (tableCoolDownCnt >= tableCoolTime)
+            {
+                tableCoolDownCnt = 0;
+                isTableCoolDown = false;
+            }
+            else
+            {
+                tableCoolDownCnt++;
+            }
+        }
+
         //乱数がクールダウン中のオブジェクトか判定する
         while (!isCheck)
         {
-            randNum = (int)Random.Range(0, 7);
+            randNum = (int)Random.Range(0, 8);
 
-            if (!obj[randNum].isCoolDown) isCheck = true;
+            if (!(oneBeforeObj >= (int)ObjectList.Default &&
+                oneBeforeObj <= (int)ObjectList.Default_R) &&
+                (randNum == (int)ObjectList.MovingFloor_Obj || 
+                randNum == (int)ObjectList.SwapFloor_Obj)) continue;
+
+            if (!obj[randNum].isCoolDown)
+            {
+                isCheck = true;
+                oneBeforeObj = randNum;
+            }
         }
 
         //オブジェクトを生成
@@ -220,6 +256,20 @@ public class Stage : MonoBehaviour
             item.GetComponent<StageObject>().destroyPoint = defaultY;
 
             isItemCoolDown = true;
+        }
+
+        int tableRandNum = (int)Random.Range(0, 100);
+
+        if (tableRandNum % 5 == 0 && !isTableCoolDown)
+        {
+            GameObject item = (GameObject)Instantiate(jumpTableObj,
+                new Vector3(Random.Range(-2.4f, 2.4f), defaultY - 0.5f, 0f), Quaternion.identity);
+
+            item.name = "JumpTable";
+            item.transform.SetParent(this.transform, false);
+            item.GetComponent<StageObject>().destroyPoint = defaultY;
+
+            isTableCoolDown = true;
         }
 
         //ノーマル系の生成の場合の処理
