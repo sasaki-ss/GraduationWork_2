@@ -8,7 +8,9 @@ public class Player : MonoBehaviour
         
     private float speed;                     //プレイヤーのスピード
     private const float TMP_SPEED = 0.03f;
+
     private float jumpPower;                 //プレイヤーのジャンプ力
+    private Vector2 jumpSpeed;               //ジャンプの制限速度
 
     private GameObject[] ColliderChecks;     //床と壁の判定
 
@@ -58,6 +60,7 @@ public class Player : MonoBehaviour
         isActive = true;
         speed = TMP_SPEED;              //速度
         jumpPower = 230.5f;           //ジャンプ力
+        jumpSpeed = new Vector2(0, 1.5f);
 
         ColliderChecks = new GameObject[3];
 
@@ -119,8 +122,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            JumpTable();
-            Debug.Log("Add" + jumpCount);
+            Debug.Log(rb2d.velocity);
         }
     }
 
@@ -141,8 +143,10 @@ public class Player : MonoBehaviour
     {
         if (isJump && Input.GetKeyDown(KeyCode.Space) && !hJumpFlg && JUMP_COOLDOWN <= highCnt)//ジャンプ
         {
-            rb2d.velocity = Vector2.zero;                       //速度リセット
+            if(jumpSpeed.y < 0)rb2d.velocity = Vector2.zero;                    //速度リセット
+            if (jumpSpeed.y < rb2d.velocity.y) rb2d.velocity = jumpSpeed;       //速度制限
             rb2d.AddForce(jumpPower * Vector2.up);              //力を加える
+            
             isJump = false;
             audioSrc.Play();                                    //効果音
             if (!countFlg) countFlg = true;
