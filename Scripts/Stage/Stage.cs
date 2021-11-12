@@ -227,6 +227,9 @@ public class Stage : MonoBehaviour
                 (randNum == (int)ObjectList.MovingFloor_Obj || 
                 randNum == (int)ObjectList.SwapFloor_Obj)) continue;
 
+            if (oneBeforeObj != (int)ObjectList.Default &&
+                randNum == (int)ObjectList.Moving_Obj) continue;
+
             if (!obj[randNum].isCoolDown)
             {
                 isCheck = true;
@@ -239,7 +242,7 @@ public class Stage : MonoBehaviour
     }
 
     //オブジェクト生成処理
-    private void GenerateObject(int _objNum,bool _isOnPlayer = false)
+    private void GenerateObject(int _objNum, bool _isOnPlayer = false)
     {
         //オブジェクトを生成
         GameObject inst = (GameObject)Instantiate(obj[_objNum].obj,
@@ -248,35 +251,35 @@ public class Stage : MonoBehaviour
         //親オブジェクトを設定
         inst.transform.SetParent(this.transform, false);
 
-
-        int itemRandNum = (int)Random.Range(0, 100);
-
-        if(itemRandNum % 10 == 0 && !isItemCoolDown &&
-            !(_objNum == (int)ObjectList.MovingFloor_Obj || _objNum == (int)ObjectList.SwapFloor_Obj))
+        if (_objNum != (int)ObjectList.MovingFloor_Obj && _objNum != (int)ObjectList.SwapFloor_Obj)
         {
-            GameObject item = (GameObject)Instantiate(jumpItemObj,
-                new Vector3(Random.Range(-2.4f, 2.4f), defaultY - 0.5f, 0f), Quaternion.identity);
+            int itemRandNum = (int)Random.Range(0, 100);
 
-            item.name = "JumpItem";
-            item.transform.SetParent(this.transform, false);
-            item.GetComponent<StageObject>().destroyPoint = defaultY;
+            if (itemRandNum % 10 == 0 && !isItemCoolDown)
+            {
+                GameObject item = (GameObject)Instantiate(jumpItemObj,
+                    new Vector3(Random.Range(-2.4f, 2.4f), defaultY + 0.5f, 0f), Quaternion.identity);
 
-            isItemCoolDown = true;
-        }
+                item.name = "JumpItem";
+                item.transform.SetParent(this.transform, false);
+                item.GetComponent<StageObject>().destroyPoint = defaultY;
 
-        int tableRandNum = (int)Random.Range(0, 100);
+                isItemCoolDown = true;
+            }
 
-        if (tableRandNum % 5 == 0 && !isTableCoolDown &&
-            !(_objNum == (int)ObjectList.MovingFloor_Obj || _objNum == (int)ObjectList.SwapFloor_Obj))
-        {
-            GameObject item = (GameObject)Instantiate(jumpTableObj,
-                new Vector3(Random.Range(-2.2f, 2.2f), defaultY - 0.5f, 0f), Quaternion.identity);
+            int tableRandNum = (int)Random.Range(0, 100);
 
-            item.name = "JumpTable";
-            item.transform.SetParent(this.transform, false);
-            item.GetComponent<StageObject>().destroyPoint = defaultY;
+            if (tableRandNum % 5 == 0 && !isTableCoolDown)
+            {
+                GameObject item = (GameObject)Instantiate(jumpTableObj,
+                    new Vector3(Random.Range(-2.2f, 2.2f), defaultY + 0.5f, 0f), Quaternion.identity);
 
-            isTableCoolDown = true;
+                item.name = "JumpTable";
+                item.transform.SetParent(this.transform, false);
+                item.GetComponent<StageObject>().destroyPoint = defaultY;
+
+                isTableCoolDown = true;
+            }
         }
 
         //ノーマル系の生成の場合の処理
