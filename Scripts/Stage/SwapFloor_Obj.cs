@@ -22,6 +22,11 @@ public class SwapFloor_Obj : StageObject
 
         objs[1].SetActive(false);
         objs[3].SetActive(false);
+
+        foreach(var obj in objs)
+        {
+            obj.GetComponent<BoxCollider2D>().enabled = false;
+        }
     }
 
     private void Update()
