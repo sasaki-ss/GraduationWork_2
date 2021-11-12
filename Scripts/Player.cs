@@ -114,6 +114,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         if (hJumpFlg) HighJump();
+        if (highNow) jTableFlg = false;
         if (jTableFlg) JumpTable();
 
         Move(); //ˆÚ“®
