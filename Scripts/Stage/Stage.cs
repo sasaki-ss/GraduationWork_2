@@ -71,20 +71,25 @@ public class Stage : MonoBehaviour
         tableCoolDownCnt = 0;
         isTableCoolDown = true;
 
+        obj[(int)ObjectList.Vanish_Obj].isCoolDown = true;
+        obj[(int)ObjectList.Moving_Obj].isCoolDown = true;
+        obj[(int)ObjectList.MovingFloor_Obj].isCoolDown = true;
+        obj[(int)ObjectList.SwapFloor_Obj].isCoolDown = true;
+
         //初期クールタイムを設定
         obj[(int)ObjectList.Default].coolTime = 0;
-        obj[(int)ObjectList.Default_L].coolTime = 4;
-        obj[(int)ObjectList.Default_R].coolTime = 4;
-        obj[(int)ObjectList.Default_None].coolTime = 6;
-        obj[(int)ObjectList.Vanish_Obj].coolTime = 6;
+        obj[(int)ObjectList.Default_L].coolTime = 2;
+        obj[(int)ObjectList.Default_R].coolTime = 2;
+        obj[(int)ObjectList.Default_None].coolTime = 10;
+        obj[(int)ObjectList.Vanish_Obj].coolTime = 8;
         obj[(int)ObjectList.Moving_Obj].coolTime = 20;
-        obj[(int)ObjectList.MovingFloor_Obj].coolTime = 6;
+        obj[(int)ObjectList.MovingFloor_Obj].coolTime = 8;
         obj[(int)ObjectList.SwapFloor_Obj].coolTime = 14;
         obj[8].coolTime = 0;
         obj[9].coolTime = 0;
 
         itemCoolTime = 50;
-        tableCoolTime = 10;
+        tableCoolTime = 15;
 
         //Resourcesフォルダのオブジェクトを読み込む
         obj[(int)ObjectList.Default].obj = 
@@ -246,7 +251,8 @@ public class Stage : MonoBehaviour
 
         int itemRandNum = (int)Random.Range(0, 100);
 
-        if(itemRandNum % 10 == 0 && !isItemCoolDown)
+        if(itemRandNum % 10 == 0 && !isItemCoolDown &&
+            !(_objNum == (int)ObjectList.MovingFloor_Obj || _objNum == (int)ObjectList.SwapFloor_Obj))
         {
             GameObject item = (GameObject)Instantiate(jumpItemObj,
                 new Vector3(Random.Range(-2.4f, 2.4f), defaultY - 0.5f, 0f), Quaternion.identity);
@@ -260,10 +266,11 @@ public class Stage : MonoBehaviour
 
         int tableRandNum = (int)Random.Range(0, 100);
 
-        if (tableRandNum % 5 == 0 && !isTableCoolDown)
+        if (tableRandNum % 5 == 0 && !isTableCoolDown &&
+            !(_objNum == (int)ObjectList.MovingFloor_Obj || _objNum == (int)ObjectList.SwapFloor_Obj))
         {
             GameObject item = (GameObject)Instantiate(jumpTableObj,
-                new Vector3(Random.Range(-2.4f, 2.4f), defaultY - 0.5f, 0f), Quaternion.identity);
+                new Vector3(Random.Range(-2.2f, 2.2f), defaultY - 0.5f, 0f), Quaternion.identity);
 
             item.name = "JumpTable";
             item.transform.SetParent(this.transform, false);
