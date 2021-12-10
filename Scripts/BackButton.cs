@@ -16,9 +16,16 @@ public class BackButton : MonoBehaviour
     public void Onclick()
     {   //É{É^ÉìÇÃèàóù
         if (sceneName == "Ranking") SceneManager.LoadScene("Title");
-        else if(sceneName == "UserLogin" && gameObject.name == "CreateButton") SceneManager.LoadScene("UserRegistration");
+        else if(sceneName == "UserLogin" && gameObject.name == "LoginButton")
+        {
+
+        }
+        else if (sceneName == "UserLogin" && gameObject.name == "CreateButton") SceneManager.LoadScene("UserRegistration");
         else if(sceneName == "UserLogin" && gameObject.name == "ReturnButton") SceneManager.LoadScene("Title");
-        else if(sceneName == "UserRegistration" && gameObject.name == "CreateButton") SceneManager.LoadScene("Title");
+        else if(sceneName == "UserRegistration" && gameObject.name == "CreateButton")
+        {
+
+        }
         else if(sceneName == "UserRegistration" && gameObject.name == "ReturnButton") SceneManager.LoadScene("UserLogin");
     }
 }
