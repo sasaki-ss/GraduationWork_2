@@ -2062,7 +2062,7 @@ GameObject:
   - component: {fileID: 1948235689}
   - component: {fileID: 1948235688}
   m_Layer: 5
-  m_Name: WorningText
+  m_Name: WarningText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
