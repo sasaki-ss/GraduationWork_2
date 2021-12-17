@@ -20,14 +20,17 @@ public class Transmission : MonoBehaviour
 
     //URLをhttpsすると動きませんのでhttpにしてください
     //本当のURL
-    private string serverURL = "http://25.11.163.122/userLogin.php";
+    private string serverURL = "";
     //テスト用のURL
     //private string serverURL = "http://192.168.0.15/a.php";
 
     //サーバー側から送られてくるテキスト
     private string resultText;
 
-    void Start()
+    //サーバー側から送られてくる固有ID
+    public string privateID { get; set; }
+
+void Start()
     {
         sceneName = SceneManager.GetActiveScene().name;
         textWorning = GameObject.Find("WarningText");
@@ -39,6 +42,7 @@ public class Transmission : MonoBehaviour
         _backButton = button.GetComponent<BackButton>();
 
         resultText = null;
+        privateID  = null;
     }
 
     void Update()
@@ -52,28 +56,37 @@ public class Transmission : MonoBehaviour
 
     void Login()
     {
+        serverURL = "http://25.11.163.122/userLogin.php";
         Send();
         _backButton.Flag = false;
     }
     void Registration()
     {
-        if(inputCon.GetComponent<InputField>().text != inputPass.GetComponent<InputField>().text)
+        if (inputCon.GetComponent<InputField>().text != inputPass.GetComponent<InputField>().text)
         {
             Debug.Log("パスワードが一致しません");
             return;
         }
-
+        serverURL = "http://25.11.163.122/userSinUp.php";
         Send();
         _backButton.Flag = false;
     }
 
     void Send()
     {
+        if (  inputID.GetComponent<InputField>().text.Length <  1 ||
+            inputPass.GetComponent<InputField>().text.Length <  1 ||
+              inputID.GetComponent<InputField>().text.Length > 10 ||
+            inputPass.GetComponent<InputField>().text.Length > 12 )
+        {
+            Debug.Log("パスワードまたは名前の文字が入力されていない、または数が大きすぎます。");
+            return;
+        }
         // サーバへPOSTするデータを設定 
         Dictionary<string, string> dic = new Dictionary<string, string>();
 
         //POSTの中身の設定
-        dic.Add("name", inputID.GetComponent<InputField>().text);            //ID
+        dic.Add("name", inputID.GetComponent<InputField>().text);          //ID
         dic.Add("password", inputPass.GetComponent<InputField>().text);    //パスワード
 
         StartCoroutine(HttpPost(serverURL, dic));  // POST
@@ -104,8 +117,8 @@ public class Transmission : MonoBehaviour
         {
             // サーバからのレスポンスを表示
             Debug.Log("接続");
-            resultText = request.downloadHandler.text;
-            Debug.Log(resultText);
+            privateID = request.downloadHandler.text;
+            Debug.Log(privateID);
         }
     }
 }
