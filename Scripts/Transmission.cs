@@ -128,8 +128,11 @@ public class Transmission : MonoBehaviour
 
     void ScoreUpdate()
     {
+
         //スコア更新するために必要な情報を送信する処理
         //Debug.Log("ScoreUpdate");
+
+        if (Transmission.privateID == null) return;
 
         serverURL = "http://25.11.163.122/scoreUpdate.php";
         //serverURL = "http://192.168.0.15/scoreUpdate.php";
