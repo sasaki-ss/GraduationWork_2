@@ -123,6 +123,11 @@ public class Transmission : MonoBehaviour
         // サーバへPOSTするデータを設定 
         Dictionary<string, string> dic = new Dictionary<string, string>();
 
+        if (Transmission.privateID == null) Transmission.privateID = "-1";
+
+        //POSTの中身の設定
+        dic.Add("id", Transmission.privateID);     //固有ID
+
         StartCoroutine(HttpPost(serverURL, dic));  // POST
     }
 
