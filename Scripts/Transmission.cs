@@ -23,6 +23,8 @@ public class Transmission : MonoBehaviour
 
     bool flg;                   //一回だけ行うフラグ
 
+    public bool ViewFlg;
+
     //URLをhttpsすると動きませんのでhttpにしてください
     //本当のURL
     string serverURL;
@@ -36,7 +38,8 @@ public class Transmission : MonoBehaviour
     public static string privateID { get; set; }
 
     //サーバー側から取得したユーザーのスコアなどをいれるやつ
-    public string[] getUserData { get; set; }
+    public static string[] getUserData { get; set; }
+
 
     void Start()
     {
@@ -53,11 +56,13 @@ public class Transmission : MonoBehaviour
         serverURL   = "";
         resultText  = "";
         flg         = false;
+        ViewFlg = false;
     }
 
     void Update()
     {
         //データの更新や挿入はphp側の処理
+        Debug.Log(Transmission.privateID);
 
         //スコアを更新する時の処理
         if (sceneName == "Result" && flg == false)
@@ -155,9 +160,9 @@ public class Transmission : MonoBehaviour
         dic.Add("score", score.GetComponent<Text>().text);    //スコア
         dic.Add("date", date);                                //日付
 
-        //Debug.Log(Transmission.privateID);
-        //Debug.Log(score.GetComponent<Text>().text);
-        //Debug.Log(date);
+        Debug.Log(Transmission.privateID);
+        Debug.Log(score.GetComponent<Text>().text);
+        Debug.Log(date);
 
         StartCoroutine(HttpPost(serverURL, dic));  // POST
     }
@@ -219,14 +224,41 @@ public class Transmission : MonoBehaviour
             {
                 //ユーザーデータを分割して代入
                 getUserData = resultText.Split('\n');
-                for (int i = 0; i < getUserData.Length - 1; i++) Debug.Log(getUserData[i]);
+
+                string fixtext="";
+
+                for(int i=0;i< getUserData.Length;i++)
+                {
+                    for (int j = 0; j < getUserData[i].Length; j++)
+                    {
+                        string retext="";
+                        string a = getUserData[i];
+
+                        char s = a[j];
+
+                        if(s == ' ')
+                        {
+                            fixtext += retext+"\n";
+                            break;
+                        }
+                        else
+                        {
+                            fixtext += s;
+                        }
+                    }
+                }
+
+                //ユーザーデータを分割して代入
+                getUserData = fixtext.Split('\n');
+                ViewFlg = true;
+               // for (int i = 0; i < getUserData.Length - 1; i++) Debug.Log(getUserData[i]);
             }
             else
             if (sceneName == "UserLogin")
             {
                 //固有IDを代入
                 privateID = request.downloadHandler.text;
-                //Debug.Log(privateID);
+                Debug.Log(privateID);
             }
             else
             {
